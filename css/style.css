@@ -1,0 +1,676 @@
+/* ==========================================================================
+   Scrole — feuille de style unique
+   - Mobile d'abord (base), puis tablette (≥ 768px), puis bureau (≥ 1100px)
+   - Thèmes clair / sombre via l'attribut data-theme sur <html>
+   - Police système (aucune police externe à charger)
+   ========================================================================== */
+
+/* ---------- Thèmes ---------- */
+
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface2: #eef0f4;
+
+  --border: rgba(0, 0, 0, 0.09);
+  --border-active: rgba(0, 0, 0, 0.22);
+
+  --text-primary: #16181d;
+  --text-secondary: #565b69;
+  --text-muted: #8a8f9c;
+
+  --accent: #3454d1;
+  --accent-light: #2a46b3;
+  --accent-glow: rgba(52, 84, 209, 0.18);
+  --accent-soft: rgba(52, 84, 209, 0.09);
+  --on-accent: #ffffff;
+
+  --ambient-top: rgba(52, 84, 209, 0.07);
+  --ambient-bottom: rgba(150, 90, 230, 0.04);
+
+  --logo-start: #5b78e8;
+  --logo-end: #3454d1;
+  --logo-border: rgba(52, 84, 209, 0.28);
+  --logo-text: #ffffff;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0c0d10;
+  --surface: #13151a;
+  --surface2: #1c1f27;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(255, 255, 255, 0.2);
+
+  --text-primary: #f0f0f2;
+  --text-secondary: #9a9dab;
+  --text-muted: #6b6e7a;
+
+  --accent: #6b8cff;
+  --accent-light: #8aa5ff;
+  --accent-glow: rgba(107, 140, 255, 0.25);
+  --accent-soft: rgba(107, 140, 255, 0.12);
+  --on-accent: #0c0d10;
+
+  --ambient-top: rgba(107, 140, 255, 0.12);
+  --ambient-bottom: rgba(180, 107, 255, 0.06);
+
+  --logo-start: #2a3266;
+  --logo-end: #1a1f3a;
+  --logo-border: rgba(107, 140, 255, 0.25);
+  --logo-text: #8aa5ff;
+}
+
+:root {
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --radius: 14px;
+  --content-w: 700px;
+}
+
+/* ---------- Base ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Lueurs d'ambiance */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(60% 40% at 50% -5%, var(--ambient-top), transparent 70%),
+    radial-gradient(50% 40% at 100% 100%, var(--ambient-bottom), transparent 70%);
+}
+
+.layout,
+.sidebar,
+main {
+  position: relative;
+  z-index: 1;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:focus-visible,
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-glow);
+}
+
+/* ---------- Layout ---------- */
+
+.layout {
+  display: block;
+}
+
+/* ---------- Barre latérale (en-tête sur mobile) ---------- */
+
+.sidebar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+
+.brand-logo {
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.brand-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.brand-tag {
+  margin: 2px 0 18px 48px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.doc-switch {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.doc-switch-current {
+  margin-bottom: 4px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.doc-switch-link {
+  font-size: 0.84rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.doc-switch-link:hover {
+  color: var(--accent-light);
+  text-decoration: underline;
+}
+
+/* Sommaire : pastilles défilantes */
+nav.toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 6px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  counter-reset: section;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-active) transparent;
+}
+
+nav.toc li {
+  counter-increment: section;
+  flex-shrink: 0;
+}
+
+nav.toc a {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+nav.toc a::before {
+  content: counter(section, decimal-leading-zero);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+nav.toc a:hover {
+  color: var(--text-primary);
+  border-color: var(--border-active);
+}
+
+nav.toc a.active {
+  background: var(--accent-soft);
+  border-color: var(--logo-border);
+  color: var(--accent-light);
+}
+
+nav.toc a.active::before {
+  color: var(--accent);
+}
+
+/* Contrôles : langue (liste déroulante) + thème */
+.controls {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.controls select {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.controls select:hover {
+  border-color: var(--border-active);
+}
+
+.theme-toggle {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--text-primary);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-active);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  display: none;
+}
+
+:root[data-theme="light"] .theme-toggle .icon-moon {
+  display: block;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+.updated {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Contenu ---------- */
+
+main {
+  padding: 32px 16px 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.doc {
+  max-width: var(--content-w);
+  width: 100%;
+}
+
+.doc>div>header {
+  margin-bottom: 32px;
+}
+
+.doc>div>header h1 {
+  font-size: 1.9rem;
+  margin: 0 0 12px;
+}
+
+.doc>div>header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+section.policy-section {
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
+  scroll-margin-top: 16px;
+}
+
+section.policy-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+section.policy-section h2 {
+  font-size: 1.2rem;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin: 0 0 14px;
+}
+
+section.policy-section h2 .num {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+section.policy-section p {
+  margin: 0 0 14px;
+}
+
+section.policy-section ul {
+  margin: 0 0 14px;
+  padding-left: 1.2em;
+}
+
+section.policy-section li {
+  margin-bottom: 8px;
+}
+
+section.policy-section li::marker {
+  color: var(--accent);
+}
+
+section.policy-section strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.note-box {
+  background: var(--accent-soft);
+  border: 1px solid var(--logo-border);
+  border-left: 3px solid var(--accent);
+  padding: 14px 16px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+}
+
+.contact-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-top: 8px;
+}
+
+.contact-block dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.contact-block dt {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-top: 12px;
+}
+
+.contact-block dt:first-child {
+  margin-top: 0;
+}
+
+.contact-block dd {
+  margin: 0;
+  word-break: break-word;
+}
+
+/* ==========================================================================
+   Tablette (≥ 768px) : en-tête en deux zones, contenu plus aéré
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .sidebar {
+    padding: 28px 48px 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 32px;
+    align-items: start;
+  }
+
+  .brand {
+    grid-column: 1;
+  }
+
+  .brand-tag {
+    grid-column: 1;
+    margin-bottom: 20px;
+  }
+
+  .doc-switch {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+    margin-bottom: 0;
+    min-width: 240px;
+  }
+
+  nav.toc {
+    grid-column: 1 / -1;
+  }
+
+  nav.toc a {
+    font-size: 0.9rem;
+    padding: 9px 14px;
+  }
+
+  .controls {
+    grid-column: 1 / -1;
+    margin-top: 18px;
+    padding-top: 18px;
+  }
+
+  .controls select {
+    flex: 0 0 200px;
+  }
+
+  .updated {
+    grid-column: 1 / -1;
+  }
+
+  main {
+    padding: 56px 48px 120px;
+  }
+
+  .doc>div>header {
+    margin-bottom: 48px;
+  }
+
+  .doc>div>header h1 {
+    font-size: 2.4rem;
+  }
+
+  .doc>div>header p {
+    font-size: 1.05rem;
+    max-width: 52ch;
+  }
+
+  section.policy-section {
+    padding: 36px 0;
+    scroll-margin-top: 24px;
+  }
+
+  section.policy-section h2 {
+    font-size: 1.4rem;
+    gap: 16px;
+  }
+
+  section.policy-section h2 .num {
+    font-size: 0.95rem;
+  }
+
+  section.policy-section p {
+    max-width: 68ch;
+  }
+
+  section.policy-section li {
+    max-width: 64ch;
+  }
+
+  .note-box {
+    padding: 16px 20px;
+    max-width: 64ch;
+  }
+
+  .contact-block {
+    padding: 26px 30px;
+  }
+
+  .contact-block dl {
+    grid-template-columns: auto 1fr;
+    gap: 10px 24px;
+  }
+
+  .contact-block dt {
+    margin-top: 0;
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================================================
+   Bureau (≥ 1100px) : barre latérale fixe + sommaire vertical
+   ========================================================================== */
+
+@media (min-width: 1100px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 40px 28px;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-active) transparent;
+  }
+
+  .brand-tag {
+    margin-bottom: 32px;
+  }
+
+  .doc-switch {
+    min-width: 0;
+    margin-bottom: 28px;
+  }
+
+  nav.toc {
+    flex: 1;
+  }
+
+  nav.toc ol {
+    display: block;
+    overflow: visible;
+    padding: 0;
+  }
+
+  nav.toc li {
+    margin-bottom: 2px;
+  }
+
+  nav.toc a {
+    white-space: normal;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 0.9rem;
+    gap: 12px;
+  }
+
+  nav.toc a::before {
+    min-width: 1.6em;
+  }
+
+  nav.toc a:hover {
+    background: var(--accent-soft);
+  }
+
+  nav.toc a.active {
+    background: var(--accent-soft);
+  }
+
+  .controls {
+    margin-top: 28px;
+  }
+
+  .controls select {
+    flex: 1;
+  }
+
+  main {
+    padding: 72px 56px 140px;
+  }
+
+  .doc>div>header h1 {
+    font-size: 2.8rem;
+  }
+
+  .doc>div>header p {
+    font-size: 1.1rem;
+  }
+
+  section.policy-section {
+    padding: 44px 0;
+  }
+
+  section.policy-section h2 {
+    font-size: 1.55rem;
+  }
+}
+
+/* ---------- Visibilité par langue (garder en dernier) ---------- */
+
+[data-lang-content] {
+  display: none;
+}
+
+[data-lang-content].active {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition: none !important;
+  }
+}
